@@ -1,0 +1,1686 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎌 Shinobi Casino: Village Legacy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --konoha-red: #dc2626;
+            --konoha-orange: #ea580c;
+            --suna-beige: #d97706;
+            --suna-yellow: #fbbf24;
+            --kiri-blue: #2563eb;
+            --kiri-teal: #0d9488;
+            --iwa-brown: #78350f;
+            --iwa-green: #16a34a;
+            --bg-dark: #0f172a;
+            --bg-darker: #020617;
+            --bg-card: #1e293b;
+            --text-light: #f8fafc;
+            --text-gold: #fbbf24;
+            --text-silver: #cbd5e1;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg-darker), var(--bg-dark));
+            color: var(--text-light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Фоновые элементы */
+        .bg-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .bg-element {
+            position: absolute;
+            font-size: 3rem;
+            opacity: 0.3;
+        }
+
+        /* Шапка */
+        .header {
+            background: linear-gradient(90deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95));
+            backdrop-filter: blur(10px);
+            border-bottom: 3px solid var(--text-gold);
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            font-size: 2.5rem;
+            color: var(--text-gold);
+            text-shadow: 0 0 15px var(--text-gold);
+        }
+
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--text-gold), #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
+        }
+
+        .tagline {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-top: 0.2rem;
+        }
+
+        /* Основной контейнер */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+        }
+
+        /* Левая панель */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9));
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 2px solid var(--text-gold);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-title {
+            color: var(--text-gold);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid rgba(251, 191, 36, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Профиль пользователя */
+        .user-profile {
+            text-align: center;
+        }
+
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(45deg, var(--konoha-red), var(--konoha-orange));
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            border: 3px solid var(--text-gold);
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+        }
+
+        .user-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .village-badge {
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .konoha-badge { background: linear-gradient(45deg, var(--konoha-red), var(--konoha-orange)); }
+        .suna-badge { background: linear-gradient(45deg, var(--suna-beige), var(--suna-yellow)); color: #000; }
+        .kiri-badge { background: linear-gradient(45deg, var(--kiri-blue), var(--kiri-teal)); }
+        .iwa-badge { background: linear-gradient(45deg, var(--iwa-brown), var(--iwa-green)); }
+
+        .balance-display {
+            font-size: 1.8rem;
+            color: var(--text-gold);
+            font-weight: bold;
+            margin: 0.5rem 0;
+            text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+        }
+
+        .rank-display {
+            font-size: 1rem;
+            color: var(--text-silver);
+            background: rgba(251, 191, 36, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            margin-top: 0.5rem;
+        }
+
+        /* Формы */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-silver);
+            font-size: 0.9rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid #475569;
+            border-radius: 8px;
+            color: var(--text-light);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--text-gold);
+            box-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid #475569;
+            border-radius: 8px;
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+
+        /* Кнопки */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(45deg, var(--text-gold), #f59e0b);
+            border: none;
+            border-radius: 10px;
+            color: var(--bg-dark);
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(245, 158, 11, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-success {
+            background: linear-gradient(45deg, var(--success), #059669);
+            color: white;
+        }
+
+        .btn-info {
+            background: linear-gradient(45deg, #3b82f6, #1d4ed8);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(45deg, var(--danger), #dc2626);
+            color: white;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Основная игровая зона */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* Ставки */
+        .bet-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            justify-content: center;
+            padding: 1rem;
+            background: rgba(15, 23, 42, 0.7);
+            border-radius: 10px;
+            border: 2px solid var(--text-gold);
+        }
+
+        .bet-display {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-gold);
+            min-width: 100px;
+            text-align: center;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+        }
+
+        .bet-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(251, 191, 36, 0.2);
+            border: 1px solid var(--text-gold);
+            color: var(--text-gold);
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .bet-btn:hover {
+            background: rgba(251, 191, 36, 0.4);
+        }
+
+        /* Игры */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .game-card {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 2px solid var(--text-gold);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(251, 191, 36, 0.2);
+            border-color: #f59e0b;
+        }
+
+        .game-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--text-gold);
+        }
+
+        .game-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .game-description {
+            font-size: 0.9rem;
+            color: var(--text-silver);
+            margin-bottom: 1rem;
+        }
+
+        /* Игровые интерфейсы */
+        .game-interface {
+            display: none;
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
+            border-radius: 15px;
+            padding: 2rem;
+            border: 2px solid var(--text-gold);
+            margin-top: 1rem;
+        }
+
+        .game-interface.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Рулетка */
+        .elements-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .element-btn {
+            aspect-ratio: 1;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            background: rgba(15, 23, 42, 0.7);
+        }
+
+        .element-btn:hover {
+            transform: scale(1.05);
+            border-color: var(--text-gold);
+        }
+
+        .element-btn.active {
+            border-color: var(--text-gold);
+            box-shadow: 0 0 20px var(--text-gold);
+        }
+
+        .element-label {
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Слоты */
+        .slots-machine {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .slot-reel {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(45deg, #1e293b, #0f172a);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            border: 3px solid var(--text-gold);
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Кости */
+        .dice-container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .dice {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: black;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Результаты */
+        .result-container {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 10px;
+            border: 1px solid var(--text-gold);
+            text-align: center;
+        }
+
+        .result-title {
+            font-size: 1.3rem;
+            color: var(--text-gold);
+            margin-bottom: 1rem;
+        }
+
+        .result-content {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-details {
+            font-size: 0.9rem;
+            color: var(--text-silver);
+        }
+
+        /* Награды и миссии */
+        .rewards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .reward-card {
+            background: rgba(251, 191, 36, 0.1);
+            border-radius: 10px;
+            padding: 1rem;
+            border: 1px solid var(--text-gold);
+        }
+
+        .mission-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem;
+            background: rgba(15, 23, 42, 0.7);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            border-left: 3px solid var(--text-gold);
+        }
+
+        .mission-progress {
+            background: rgba(251, 191, 36, 0.2);
+            height: 5px;
+            border-radius: 3px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+
+        .mission-progress-bar {
+            height: 100%;
+            background: var(--text-gold);
+            transition: width 0.3s ease;
+        }
+
+        /* Таблица лидеров */
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .leaderboard-table th {
+            background: rgba(251, 191, 36, 0.2);
+            padding: 1rem;
+            text-align: left;
+            color: var(--text-gold);
+        }
+
+        .leaderboard-table td {
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid #334155;
+        }
+
+        .leaderboard-table tr:hover {
+            background: rgba(251, 191, 36, 0.1);
+        }
+
+        /* Уведомления */
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-width: 300px;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .notification.success {
+            background: linear-gradient(45deg, var(--success), #059669);
+            border-left: 5px solid #10b981;
+        }
+
+        .notification.error {
+            background: linear-gradient(45deg, var(--danger), #dc2626);
+            border-left: 5px solid #ef4444;
+        }
+
+        .notification.info {
+            background: linear-gradient(45deg, #3b82f6, #1d4ed8);
+            border-left: 5px solid #2563eb;
+        }
+
+        /* Мобильная адаптация */
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .games-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .elements-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .bet-controls {
+                flex-wrap: wrap;
+            }
+        }
+
+        /* Анимации */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .pulse {
+            animation: pulse 0.5s ease 3;
+        }
+
+        .spin {
+            animation: spin 1s linear infinite;
+        }
+
+        /* Прогресс бар */
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background: rgba(15, 23, 42, 0.7);
+            border-radius: 4px;
+            margin: 0.5rem 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--text-gold), #f59e0b);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        /* Тултипы */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: help;
+        }
+
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background: var(--bg-card);
+            color: var(--text-light);
+            text-align: center;
+            padding: 0.5rem;
+            border-radius: 6px;
+            border: 1px solid var(--text-gold);
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Фоновые элементы -->
+    <div class="bg-elements" id="bgElements"></div>
+
+    <!-- Шапка -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">🎌</div>
+            <div>
+                <div class="logo-text">SHINOBI CASINO: VILLAGE LEGACY</div>
+                <div class="tagline">Ваша ставка — это джитсу. Ваша удача — это чакра.</div>
+            </div>
+        </div>
+        <div class="user-status" id="userStatus">
+            <span style="color: var(--text-silver)">Войдите, чтобы начать игру</span>
+        </div>
+    </header>
+
+    <!-- Основной контейнер -->
+    <div class="container">
+        <!-- Левая панель -->
+        <div class="sidebar">
+            <!-- Профиль пользователя -->
+            <div class="card user-profile">
+                <div class="card-title"><i class="fas fa-user-ninja"></i> Профиль шиноби</div>
+                <div class="user-avatar" id="userAvatar">?</div>
+                <div class="user-name" id="userName">Гость</div>
+                <div class="village-badge konoha-badge" id="userVillage">Выберите деревню</div>
+                <div class="balance-display" id="userBalance">1,000 Рё</div>
+                <div class="rank-display" id="userRank">Ранг: Генин</div>
+                <div style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-silver)" id="userStats">
+                    Всего заработано: 0 Рё
+                </div>
+            </div>
+
+            <!-- Регистрация -->
+            <div class="card">
+                <div class="card-title"><i class="fas fa-user-plus"></i> Стать шиноби</div>
+                <div class="form-group">
+                    <input type="text" class="form-input" id="regUsername" placeholder="Имя шиноби">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-input" id="regPassword" placeholder="Секретное слово">
+                </div>
+                <div class="form-group">
+                    <select class="form-select" id="regVillage">
+                        <option value="konoha">🍃 Коноха (Огонь)</option>
+                        <option value="suna">🏜️ Суна (Ветер)</option>
+                        <option value="kiri">🌫️ Кири (Вода)</option>
+                        <option value="iwa">⛰️ Ива (Земля)</option>
+                    </select>
+                </div>
+                <button class="btn" onclick="register()">
+                    <i class="fas fa-scroll"></i> Принять клятву
+                </button>
+            </div>
+
+            <!-- Вход -->
+            <div class="card">
+                <div class="card-title"><i class="fas fa-sign-in-alt"></i> Вход в деревню</div>
+                <div class="form-group">
+                    <input type="text" class="form-input" id="loginUsername" placeholder="Имя шиноби">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-input" id="loginPassword" placeholder="Секретное слово">
+                </div>
+                <button class="btn btn-success" onclick="login()">
+                    <i class="fas fa-door-open"></i> Войти
+                </button>
+            </div>
+
+            <!-- Награды -->
+            <div class="card">
+                <div class="card-title"><i class="fas fa-gift"></i> Ежедневная награда</div>
+                <div id="dailyRewardInfo" style="text-align: center; padding: 1rem;">
+                    <div style="font-size: 0.9rem; margin-bottom: 0.5rem;">Получайте 500 Рё каждый день!</div>
+                    <div id="rewardTimer" style="color: var(--text-gold); font-weight: bold;">Доступно сейчас</div>
+                </div>
+                <button class="btn btn-success" onclick="claimDailyReward()" id="claimRewardBtn">
+                    <i class="fas fa-coins"></i> Получить награду
+                </button>
+            </div>
+
+            <!-- Миссии -->
+            <div class="card">
+                <div class="card-title"><i class="fas fa-tasks"></i> Миссии</div>
+                <div id="missionsList" style="max-height: 200px; overflow-y: auto;">
+                    <div style="text-align: center; padding: 1rem; color: var(--text-silver);">
+                        Войдите, чтобы увидеть миссии
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Основная игровая зона -->
+        <div class="main-content">
+            <!-- Управление ставкой -->
+            <div class="card">
+                <div class="card-title"><i class="fas fa-coins"></i> Управление ставкой</div>
+                <div class="bet-controls">
+                    <button class="bet-btn" onclick="changeBet(-1000)">-1K</button>
+                    <button class="bet-btn" onclick="changeBet(-100)">-100</button>
+                    <div class="bet-display" id="currentBet">100 Рё</div>
+                    <button class="bet-btn" onclick="changeBet(100)">+100</button>
+                    <button class="bet-btn" onclick="changeBet(1000)">+1K</button>
+                </div>
+                <div style="text-align: center; margin-top: 1rem; font-size: 0.9rem; color: var(--text-silver)">
+                    Минимальная ставка: 10 Рё
+                </div>
+            </div>
+
+            <!-- Выбор игры -->
+            <div class="card">
+                <div class="card-title"><i class="fas fa-gamepad"></i> Выберите испытание</div>
+                <div class="games-grid">
+                    <div class="game-card" onclick="showGame('roulette')">
+                        <div class="game-icon">🎯</div>
+                        <div class="game-title">Рулетка Стихий</div>
+                        <div class="game-description">Выберите стихию. Шанс выигрыша 60%</div>
+                        <div style="color: var(--success); font-size: 0.9rem;">🔥 Бонус Конохи: x2 за Огонь</div>
+                    </div>
+
+                    <div class="game-card" onclick="showGame('slots')">
+                        <div class="game-icon">🎰</div>
+                        <div class="game-title">Слоты Призыва</div>
+                        <div class="game-description">Гарантированный выигрыш 20% от ставки</div>
+                        <div style="color: var(--success); font-size: 0.9rem;">🌪️ Бонус Суны: +30% к выигрышу</div>
+                    </div>
+
+                    <div class="game-card" onclick="showGame('dice')">
+                        <div class="game-icon">🎲</div>
+                        <div class="game-title">Кости Бижу</div>
+                        <div class="game-description">Бросьте 2 кости. Сумма 7 = x2 выигрыш</div>
+                        <div style="color: var(--success); font-size: 0.9rem;">⛰️ Бонус Ивы: +50% к выигрышу</div>
+                    </div>
+
+                    <div class="game-card" onclick="showGame('blackjack')">
+                        <div class="game-icon">🃏</div>
+                        <div class="game-title">Блэкджек Акацуки</div>
+                        <div class="game-description">Наберите больше очков, чем дилер</div>
+                        <div style="color: var(--success); font-size: 0.9rem;">💧 Бонус Кири: +30% к выигрышу</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Игровой интерфейс -->
+            <div class="game-interface" id="rouletteInterface">
+                <div class="card-title"><i class="fas fa-dharmachakra"></i> Рулетка Стихий</div>
+                <div style="text-align: center; margin-bottom: 1.5rem;">
+                    <p>Выберите стихию. Если выпадет ваша стихия - бонус x2!</p>
+                    <p style="color: var(--text-gold); font-size: 0.9rem;">🔥 Шанс выигрыша: 60%</p>
+                </div>
+
+                <div class="elements-grid">
+                    <div class="element-btn fire" onclick="selectElement('fire')">
+                        <div>🔥</div>
+                        <div class="element-label">Огонь</div>
+                    </div>
+                    <div class="element-btn water" onclick="selectElement('water')">
+                        <div>💧</div>
+                        <div class="element-label">Вода</div>
+                    </div>
+                    <div class="element-btn wind" onclick="selectElement('wind')">
+                        <div>🌪️</div>
+                        <div class="element-label">Ветер</div>
+                    </div>
+                    <div class="element-btn earth" onclick="selectElement('earth')">
+                        <div>🌍</div>
+                        <div class="element-label">Земля</div>
+                    </div>
+                    <div class="element-btn lightning" onclick="selectElement('lightning')">
+                        <div>⚡</div>
+                        <div class="element-label">Молния</div>
+                    </div>
+                </div>
+
+                <button class="btn" onclick="playGame('roulette')">
+                    <i class="fas fa-sync-alt"></i> Вращать колесо
+                </button>
+            </div>
+
+            <div class="game-interface" id="slotsInterface">
+                <div class="card-title"><i class="fas fa-scroll"></i> Слоты Призыва</div>
+                <div style="text-align: center; margin-bottom: 1.5rem;">
+                    <p>Соберите 3 одинаковых символа для большого выигрыша!</p>
+                    <p style="color: var(--text-gold); font-size: 0.9rem;">🎰 Гарантированный мини-выигрыш: 20% от ставки</p>
+                </div>
+
+                <div class="slots-machine">
+                    <div class="slot-reel" id="slot1">?</div>
+                    <div class="slot-reel" id="slot2">?</div>
+                    <div class="slot-reel" id="slot3">?</div>
+                </div>
+
+                <button class="btn" onclick="playGame('slots')">
+                    <i class="fas fa-play"></i> Крутить барабаны
+                </button>
+            </div>
+
+            <div class="game-interface" id="diceInterface">
+                <div class="card-title"><i class="fas fa-dice"></i> Кости Бижу</div>
+                <div style="text-align: center; margin-bottom: 1.5rem;">
+                    <p>Бросьте 2 кости. Чем реже сумма - тем больше выигрыш!</p>
+                    <p style="color: var(--text-gold); font-size: 0.9rem;">🎲 Сумма 7 = x2, 2 или 12 = x5!</p>
+                </div>
+
+                <div class="dice-container">
+                    <div class="dice" id="dice1">⚀</div>
+                    <div class="dice" id="dice2">⚀</div>
+                </div>
+
+                <div style="text-align: center; margin: 1rem 0;">
+                    <div style="font-size: 1.2rem;">Сумма: <span id="diceTotal">2</span></div>
+                </div>
+
+                <button class="btn" onclick="playGame('dice')">
+                    <i class="fas fa-dice-d20"></i> Бросить кости
+                </button>
+            </div>
+
+            <div class="game-interface" id="blackjackInterface">
+                <div class="card-title"><i class="fas fa-spade"></i> Блэкджек Акацуки</div>
+                <div style="text-align: center; margin-bottom: 1.5rem;">
+                    <p>Наберите больше очков чем дилер, но не больше 21!</p>
+                    <p style="color: var(--text-gold); font-size: 0.9rem;">🃏 Ваша ставка возвращается при ничье</p>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
+                    <div>
+                        <h3 style="color: var(--text-gold); margin-bottom: 1rem;">Дилер</h3>
+                        <div style="font-size: 2rem; text-align: center;" id="dealerScore">?</div>
+                    </div>
+                    <div>
+                        <h3 style="color: var(--text-gold); margin-bottom: 1rem;">Вы</h3>
+                        <div style="font-size: 2rem; text-align: center;" id="playerScore">?</div>
+                    </div>
+                </div>
+
+                <button class="btn" onclick="playGame('blackjack')">
+                    <i class="fas fa-play"></i> Начать игру
+                </button>
+            </div>
+
+            <!-- Результаты -->
+            <div class="result-container" id="resultContainer">
+                <div class="result-title" id="resultTitle">Результат игры</div>
+                <div class="result-content" id="resultContent">Выберите игру и сделайте ставку</div>
+                <div class="result-details" id="resultDetails"></div>
+            </div>
+
+            <!-- Дополнительная информация -->
+            <div class="card">
+                <div class="card-title"><i class="fas fa-info-circle"></i> Информация</div>
+                <div class="btn-group">
+                    <button class="btn btn-info btn-small" onclick="getLeaderboard()">
+                        <i class="fas fa-trophy"></i> Таблица лидеров
+                    </button>
+                    <button class="btn btn-info btn-small" onclick="getStats()">
+                        <i class="fas fa-chart-bar"></i> Статистика
+                    </button>
+                    <button class="btn btn-info btn-small" onclick="refreshUserInfo()">
+                        <i class="fas fa-sync"></i> Обновить
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Скрипт -->
+    <script>
+        // Конфигурация
+        const API_URL = 'http://127.0.0.1:8000';
+        let currentUser = null;
+        let selectedElement = 'fire';
+        let currentBet = 100;
+        let currentGame = 'roulette';
+
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', () => {
+            initBackgroundElements();
+            showGame('roulette');
+            checkAPI();
+
+            // Загружаем данные если пользователь уже вошел
+            const savedUser = localStorage.getItem('shinobi_user');
+            if (savedUser) {
+                try {
+                    currentUser = JSON.parse(savedUser);
+                    updateUserInfo();
+                    loadMissions();
+                    checkDailyReward();
+                } catch (e) {
+                    console.error('Ошибка загрузки пользователя:', e);
+                }
+            }
+        });
+
+        // Фоновые элементы
+        function initBackgroundElements() {
+            const container = document.getElementById('bgElements');
+            const symbols = ['🎌', '🍥', '🌀', '⚡', '🔥', '💧', '🌪️', '🌍', '🎯', '🎰', '🃏', '🎲'];
+
+            for (let i = 0; i < 20; i++) {
+                const element = document.createElement('div');
+                element.className = 'bg-element';
+                element.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                element.style.left = `${Math.random() * 100}%`;
+                element.style.top = `${Math.random() * 100}%`;
+                element.style.fontSize = `${Math.random() * 2 + 2}rem`;
+                element.style.opacity = Math.random() * 0.2 + 0.1;
+                element.style.animation = `float ${Math.random() * 10 + 10}s infinite linear`;
+                container.appendChild(element);
+            }
+
+            // Добавляем стили для анимации
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes float {
+                    0% { transform: translateY(0) rotate(0deg); }
+                    100% { transform: translateY(-100vh) rotate(360deg); }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Проверка API
+        async function checkAPI() {
+            try {
+                const response = await fetch(`${API_URL}/`);
+                const data = await response.json();
+                console.log('✅ API доступен:', data);
+            } catch (error) {
+                showNotification('error', '⚠️ API сервер не отвечает. Запустите бэкенд: python main.py');
+            }
+        }
+
+        // Уведомления
+        function showNotification(type, message) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+
+            const icon = type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️';
+            notification.innerHTML = `
+                <span style="font-size: 1.2rem">${icon}</span>
+                <span>${message}</span>
+            `;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'slideIn 0.3s ease reverse';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Регистрация
+        async function register() {
+            const username = document.getElementById('regUsername').value.trim();
+            const password = document.getElementById('regPassword').value;
+            const village = document.getElementById('regVillage').value;
+
+            if (!username || !password) {
+                showNotification('error', 'Заполните все поля');
+                return;
+            }
+
+            if (username.length < 3) {
+                showNotification('error', 'Имя должно быть минимум 3 символа');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/api/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password, village })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    showNotification('success', result.message);
+
+                    // Автоматически входим после регистрации
+                    document.getElementById('loginUsername').value = username;
+                    document.getElementById('loginPassword').value = password;
+                    await login();
+
+                    // Очищаем поля
+                    document.getElementById('regUsername').value = '';
+                    document.getElementById('regPassword').value = '';
+                } else {
+                    showNotification('error', result.detail || 'Ошибка регистрации');
+                }
+            } catch (error) {
+                showNotification('error', 'Ошибка соединения с сервером');
+            }
+        }
+
+        // Вход
+        async function login() {
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value;
+
+            if (!username || !password) {
+                showNotification('error', 'Заполните все поля');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/api/login?username=${username}&password=${password}`, {
+                    method: 'POST'
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showNotification('success', 'Вход выполнен успешно!');
+
+                    currentUser = result.user;
+                    localStorage.setItem('shinobi_user', JSON.stringify(currentUser));
+
+                    updateUserInfo();
+                    loadMissions();
+                    checkDailyReward();
+
+                    // Очищаем поля
+                    document.getElementById('loginUsername').value = '';
+                    document.getElementById('loginPassword').value = '';
+                } else {
+                    showNotification('error', result.detail || 'Ошибка входа');
+                }
+            } catch (error) {
+                showNotification('error', 'Ошибка соединения с сервером');
+            }
+        }
+
+        // Обновление информации о пользователе
+        function updateUserInfo() {
+            if (!currentUser) return;
+
+            document.getElementById('userName').textContent = currentUser.username;
+            document.getElementById('userBalance').textContent = currentUser.ryo.toLocaleString() + ' Рё';
+            document.getElementById('userRank').textContent = `Ранг: ${getRankName(currentUser.rank)}`;
+            document.getElementById('userStats').innerHTML = `
+                Всего заработано: <span style="color: var(--text-gold)">${currentUser.total_earned?.toLocaleString() || 0} Рё</span>
+            `;
+
+            // Аватар
+            const avatar = document.getElementById('userAvatar');
+            avatar.innerHTML = getVillageEmoji(currentUser.village);
+            avatar.style.background = getVillageGradient(currentUser.village);
+
+            // Значок деревни
+            const badge = document.getElementById('userVillage');
+            badge.textContent = getVillageName(currentUser.village);
+            badge.className = `village-badge ${currentUser.village}-badge`;
+
+            // Статус в шапке
+            document.getElementById('userStatus').innerHTML = `
+                <span style="color: var(--text-gold)">${currentUser.username}</span> |
+                <span>${currentUser.ryo.toLocaleString()} Рё</span>
+            `;
+        }
+
+        // Получение ежедневной награды
+        async function checkDailyReward() {
+            if (!currentUser) return;
+
+            try {
+                const response = await fetch(`${API_URL}/api/daily-reward/${currentUser.username}`);
+                const result = await response.json();
+
+                if (result.success) {
+                    const btn = document.getElementById('claimRewardBtn');
+                    const timer = document.getElementById('rewardTimer');
+
+                    if (result.can_claim) {
+                        btn.disabled = false;
+                        btn.innerHTML = '<i class="fas fa-coins"></i> Получить награду';
+                        timer.textContent = 'Доступно сейчас!';
+                        timer.style.color = 'var(--text-gold)';
+                    } else {
+                        btn.disabled = true;
+                        btn.innerHTML = '<i class="fas fa-clock"></i> Уже получено';
+                        timer.textContent = 'Доступно завтра';
+                        timer.style.color = 'var(--text-silver)';
+                    }
+                }
+            } catch (error) {
+                console.error('Ошибка проверки награды:', error);
+            }
+        }
+
+        async function claimDailyReward() {
+            if (!currentUser) {
+                showNotification('error', 'Сначала войдите в систему');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/api/claim-daily-reward`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: currentUser.username })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showNotification('success', result.message);
+                    currentUser.ryo = result.new_balance;
+                    updateUserInfo();
+                    checkDailyReward();
+                } else {
+                    showNotification('error', result.detail || 'Ошибка получения награды');
+                }
+            } catch (error) {
+                showNotification('error', 'Ошибка соединения с сервером');
+            }
+        }
+
+        // Загрузка миссий
+        async function loadMissions() {
+            if (!currentUser) return;
+
+            try {
+                const response = await fetch(`${API_URL}/api/missions/${currentUser.username}`);
+                const result = await response.json();
+
+                if (result.success) {
+                    const missionsList = document.getElementById('missionsList');
+                    missionsList.innerHTML = '';
+
+                    result.missions.forEach(mission => {
+                        const missionDiv = document.createElement('div');
+                        missionDiv.className = 'mission-item';
+
+                        let progressText = '';
+                        let progressPercent = 0;
+
+                        switch (mission.type) {
+                            case 'play_10_games':
+                                progressText = `Сыграть 10 игр: ${mission.progress}/10`;
+                                progressPercent = (mission.progress / 10) * 100;
+                                break;
+                            case 'earn_5000_ryo':
+                                progressText = `Заработать 5000 Рё: ${currentUser.total_earned || 0}/5000`;
+                                progressPercent = Math.min((currentUser.total_earned || 0) / 5000 * 100, 100);
+                                break;
+                            case 'reach_chunin':
+                                progressText = 'Достичь ранга Чунин';
+                                progressPercent = currentUser.rank === 'genin' ? 0 : 100;
+                                break;
+                        }
+
+                        missionDiv.innerHTML = `
+                            <div>
+                                <div style="font-weight: bold;">${progressText}</div>
+                                <div class="progress-container">
+                                    <div class="progress-bar" style="width: ${progressPercent}%"></div>
+                                </div>
+                            </div>
+                            <div style="color: var(--text-gold); font-weight: bold;">
+                                ${mission.completed ? '✅' : `${mission.reward} Рё`}
+                            </div>
+                        `;
+
+                        missionsList.appendChild(missionDiv);
+                    });
+                }
+            } catch (error) {
+                console.error('Ошибка загрузки миссий:', error);
+            }
+        }
+
+        // Изменение ставки
+        function changeBet(amount) {
+            if (!currentUser) {
+                showNotification('error', 'Сначала войдите в систему');
+                return;
+            }
+
+            let newBet = currentBet + amount;
+
+            if (newBet < 10) newBet = 10;
+            if (newBet > currentUser.ryo) {
+                newBet = currentUser.ryo;
+                showNotification('info', 'Максимальная ставка: ваш текущий баланс');
+            }
+
+            currentBet = newBet;
+            document.getElementById('currentBet').textContent = newBet.toLocaleString() + ' Рё';
+
+            // Анимация
+            const betDisplay = document.getElementById('currentBet');
+            betDisplay.classList.add('pulse');
+            setTimeout(() => betDisplay.classList.remove('pulse'), 500);
+        }
+
+        // Выбор игры
+        function showGame(gameType) {
+            currentGame = gameType;
+
+            // Скрываем все интерфейсы
+            document.querySelectorAll('.game-interface').forEach(el => {
+                el.classList.remove('active');
+            });
+
+            // Показываем выбранный интерфейс
+            document.getElementById(`${gameType}Interface`).classList.add('active');
+
+            // Сбрасываем выбор элемента для рулетки
+            if (gameType === 'roulette') {
+                document.querySelectorAll('.element-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                document.querySelector('.element-btn.fire').classList.add('active');
+                selectedElement = 'fire';
+            }
+        }
+
+        // Выбор элемента в рулетке
+        function selectElement(element) {
+            selectedElement = element;
+
+            document.querySelectorAll('.element-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            event.currentTarget.classList.add('active');
+        }
+
+        // Игра
+        async function playGame(gameType) {
+            if (!currentUser) {
+                showNotification('error', 'Сначала войдите в систему');
+                return;
+            }
+
+            if (currentBet > currentUser.ryo) {
+                showNotification('error', 'Недостаточно Рё');
+                return;
+            }
+
+            if (currentBet < 10) {
+                showNotification('error', 'Минимальная ставка: 10 Рё');
+                return;
+            }
+
+            const gameData = {
+                username: currentUser.username,
+                bet: currentBet
+            };
+
+            // Для рулетки добавляем элемент
+            if (gameType === 'roulette') {
+                gameData.element = selectedElement;
+            }
+
+            try {
+                showNotification('info', 'Играем...');
+
+                const response = await fetch(`${API_URL}/api/game/${gameType}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(gameData)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // Обновляем пользователя
+                    currentUser.ryo = result.user.new_balance;
+                    currentUser.rank = result.user.new_rank;
+                    localStorage.setItem('shinobi_user', JSON.stringify(currentUser));
+
+                    updateUserInfo();
+                    displayGameResult(result);
+                    loadMissions(); // Обновляем миссии
+                } else {
+                    showNotification('error', result.detail || 'Ошибка игры');
+                }
+            } catch (error) {
+                showNotification('error', 'Ошибка соединения с сервером');
+            }
+        }
+
+        // Отображение результата игры
+        function displayGameResult(result) {
+            const game = result.game;
+            const gameResult = result.result;
+
+            let resultTitle = '';
+            let resultContent = '';
+            let resultDetails = '';
+
+            // Анимации для разных игр
+            if (game === 'roulette') {
+                // Анимация слотов
+                animateSlots(result.result.details);
+
+                resultTitle = gameResult.result === 'win' ? '🎉 Победа!' : '💫 Попробуйте еще раз!';
+                resultContent = `Выпал: ${getElementEmoji(result.result.winning_element)}`;
+
+                if (gameResult.result === 'win') {
+                    resultContent += `<br><span style="color: var(--text-gold); font-size: 1.2rem;">Вы выиграли ${result.result.win_amount} Рё!</span>`;
+                } else {
+                    resultContent += `<br><span style="color: var(--text-silver);">Вы проиграли ${currentBet} Рё.</span>`;
+                }
+
+                resultDetails = `Шанс выигрыша: 60% | Ваша ставка: ${currentBet} Рё`;
+            }
+            else if (game === 'slots') {
+                // Анимация слотов
+                animateSlots(result.result.results);
+
+                resultTitle = '🎰 Результат слотов';
+                resultContent = `Символы: ${result.result.results.join(' ')}`;
+
+                if (result.result.win_amount > 0) {
+                    resultContent += `<br><span style="color: var(--text-gold); font-size: 1.2rem;">Выигрыш: ${result.result.win_amount} Рё!</span>`;
+                }
+
+                resultDetails = `Гарантированный мини-выигрыш: 20% от ставки`;
+            }
+            else if (game === 'dice') {
+                // Анимация костей
+                animateDice(result.result.dice1, result.result.dice2, result.result.total);
+
+                resultTitle = '🎲 Результат броска';
+                resultContent = `Кости: ${result.result.dice1} ${result.result.dice2}`;
+                resultContent += `<br>Сумма: <span style="color: var(--text-gold); font-weight: bold;">${result.result.total}</span>`;
+
+                if (result.result.win_amount > 0) {
+                    resultContent += `<br><span style="color: var(--text-gold); font-size: 1.2rem;">Выигрыш: ${result.result.win_amount} Рё!</span>`;
+                }
+
+                resultDetails = `Сумма 7 = x2 | 2 или 12 = x5 | 6 или 8 = x1.5`;
+            }
+            else if (game === 'blackjack') {
+                resultTitle = '🃏 Результат блэкджека';
+                resultContent = `Вы: ${result.result.player_score} | Дилер: ${result.result.dealer_score}`;
+
+                if (result.result.result === 'win') {
+                    resultContent += `<br><span style="color: var(--text-gold); font-size: 1.2rem;">Вы выиграли ${result.result.win_amount} Рё!</span>`;
+                } else if (result.result.result === 'draw') {
+                    resultContent += `<br><span style="color: var(--text-silver);">Ничья! Ставка возвращена.</span>`;
+                } else {
+                    resultContent += `<br><span style="color: var(--text-silver);">Вы проиграли.</span>`;
+                }
+
+                resultDetails = `Цель: набрать больше очков чем дилер, но не больше 21`;
+            }
+
+            document.getElementById('resultTitle').innerHTML = resultTitle;
+            document.getElementById('resultContent').innerHTML = resultContent;
+            document.getElementById('resultDetails').innerHTML = resultDetails;
+
+            // Анимация результата
+            const resultContainer = document.getElementById('resultContainer');
+            resultContainer.classList.add('pulse');
+            setTimeout(() => resultContainer.classList.remove('pulse'), 500);
+        }
+
+        // Анимация слотов
+        function animateSlots(results) {
+            const slots = ['🎯', '💰', '🍥', '🌀', '⚡', '🔥', '💧'];
+            const slotElements = [document.getElementById('slot1'), document.getElementById('slot2'), document.getElementById('slot3')];
+
+            // Анимация вращения
+            slotElements.forEach((slot, index) => {
+                let spins = 0;
+                const spinInterval = setInterval(() => {
+                    slot.textContent = slots[Math.floor(Math.random() * slots.length)];
+                    spins++;
+
+                    if (spins > 15) {
+                        clearInterval(spinInterval);
+                        // Финальный результат
+                        if (Array.isArray(results)) {
+                            slot.textContent = results[index];
+                        } else {
+                            slot.textContent = '🎯';
+                        }
+                    }
+                }, 100);
+            });
+        }
+
+        // Анимация костей
+        function animateDice(dice1, dice2, total) {
+            const diceElements = [
+                document.getElementById('dice1'),
+                document.getElementById('dice2')
+            ];
+            const totalElement = document.getElementById('diceTotal');
+
+            const diceFaces = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
+
+            let rolls = 0;
+            const rollInterval = setInterval(() => {
+                diceElements[0].textContent = diceFaces[Math.floor(Math.random() * 6)];
+                diceElements[1].textContent = diceFaces[Math.floor(Math.random() * 6)];
+                totalElement.textContent = Math.floor(Math.random() * 11) + 2;
+
+                rolls++;
+
+                if (rolls > 10) {
+                    clearInterval(rollInterval);
+                    diceElements[0].textContent = dice1;
+                    diceElements[1].textContent = dice2;
+                    totalElement.textContent = total;
+
+                    // Анимация успеха если выигрыш
+                    if (total === 7 || total === 2 || total === 12) {
+                        diceElements.forEach(dice => {
+                            dice.classList.add('pulse');
+                            setTimeout(() => dice.classList.remove('pulse'), 1000);
+                        });
+                    }
+                }
+            }, 100);
+        }
+
+        // Таблица лидеров
+        async function getLeaderboard() {
+            try {
+                const response = await fetch(`${API_URL}/api/leaderboard`);
+                const result = await response.json();
+
+                if (result.success) {
+                    let leaderboardHTML = `
+                        <h3 style="color: var(--text-gold); margin-bottom: 1rem;">🏆 Топ 10 шиноби</h3>
+                        <table class="leaderboard-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Имя</th>
+                                    <th>Деревня</th>
+                                    <th>Баланс</th>
+                                    <th>Ранг</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+
+                    result.leaderboard.forEach(player => {
+                        leaderboardHTML += `
+                            <tr>
+                                <td>${player.rank}</td>
+                                <td><strong>${player.username}</strong></td>
+                                <td><span class="village-badge ${player.village}-badge" style="font-size: 0.8rem;">${getVillageName(player.village)}</span></td>
+                                <td style="color: var(--text-gold); font-weight: bold;">${player.ryo.toLocaleString()} Рё</td>
+                                <td>${getRankName(player.rank_title)}</td>
+                            </tr>
+                        `;
+                    });
+
+                    leaderboardHTML += `</tbody></table>`;
+
+                    document.getElementById('resultTitle').textContent = 'Таблица лидеров';
+                    document.getElementById('resultContent').innerHTML = leaderboardHTML;
+                    document.getElementById('resultDetails').textContent = 'Обновляется в реальном времени';
+                }
+            } catch (error) {
+                showNotification('error', 'Ошибка загрузки таблицы лидеров');
+            }
+        }
+
+        // Статистика
+        async function getStats() {
+            if (!currentUser) {
+                showNotification('error', 'Сначала войдите в систему');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/api/stats/${currentUser.username}`);
+                const result = await response.json();
+
+                if (result.success) {
+                    const stats = result.stats;
+                    const profit = stats.total_win - stats.total_bet;
+
+                    const statsHTML = `
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin: 1rem 0;">
+                            <div style="background: rgba(15, 23, 42, 0.7); padding: 1rem; border-radius: 10px;">
+                                <div style="color: var(--text-silver); font-size: 0.9rem;">Всего игр</div>
+                                <div style="color: var(--text-gold); font-size: 1.5rem; font-weight: bold;">${stats.total_games}</div>
+                            </div>
+                            <div style="background: rgba(15, 23, 42, 0.7); padding: 1rem; border-radius: 10px;">
+                                <div style="color: var(--text-silver); font-size: 0.9rem;">Общая ставка</div>
+                                <div style="color: var(--text-gold); font-size: 1.5rem; font-weight: bold;">${stats.total_bet.toLocaleString()} Рё</div>
+                            </div>
+                            <div style="background: rgba(15, 23, 42, 0.7); padding: 1rem; border-radius: 10px;">
+                                <div style="color: var(--text-silver); font-size: 0.9rem;">Общий выигрыш</div>
+                                <div style="color: var(--text-gold); font-size: 1.5rem; font-weight: bold;">${stats.total_win.toLocaleString()} Рё</div>
+                            </div>
+                            <div style="background: rgba(15, 23, 42, 0.7); padding: 1rem; border-radius: 10px;">
+                                <div style="color: var(--text-silver); font-size: 0.9rem;">Прибыль</div>
+                                <div style="color: ${profit >= 0 ? 'var(--text-gold)' : 'var(--danger)'}; font-size: 1.5rem; font-weight: bold;">
+                                    ${profit >= 0 ? '+' : ''}${profit.toLocaleString()} Рё
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                    document.getElementById('resultTitle').textContent = 'Ваша статистика';
+                    document.getElementById('resultContent').innerHTML = statsHTML;
+                    document.getElementById('resultDetails').textContent = 'Статистика обновляется после каждой игры';
+                }
+            } catch (error) {
+                showNotification('error', 'Ошибка загрузки статистики');
+            }
+        }
+
+        // Обновление информации
+        function refreshUserInfo() {
+            if (currentUser) {
+                showNotification('info', 'Информация обновлена');
+                updateUserInfo();
+                loadMissions();
+                checkDailyReward();
+            } else {
+                showNotification('error', 'Сначала войдите в систему');
+            }
+        }
+
+        // Вспомогательные функции
+        function getVillageName(village) {
+            const names = {
+                konoha: '🍃 Коноха',
+                suna: '🏜️ Суна',
+                kiri: '🌫️ Кири',
+                iwa: '⛰️ Ива'
+            };
+            return names[village] || village;
+        }
+
+        function getVillageEmoji(village) {
+            const emojis = {
+                konoha: '🍃',
+                suna: '🏜️',
+                kiri: '🌫️',
+                iwa: '⛰️'
+            };
+            return emojis[village] || '🎌';
+        }
+
+        function getVillageGradient(village) {
+            const gradients = {
+                konoha: 'linear-gradient(45deg, #dc2626, #ea580c)',
+                suna: 'linear-gradient(45deg, #d97706, #fbbf24)',
+                kiri: 'linear-gradient(45deg, #2563eb, #0d9488)',
+                iwa: 'linear-gradient(45deg, #78350f, #16a34a)'
+            };
+            return gradients[village] || 'linear-gradient(45deg, #dc2626, #ea580c)';
+        }
+
+        function getRankName(rank) {
+            const names = {
+                genin: 'Генин',
+                chunin: 'Чунин',
+                jonin: 'Джоунин',
+                kage: 'Каге'
+            };
+            return names[rank] || rank;
+        }
+
+        function getElementEmoji(element) {
+            const emojis = {
+                fire: '🔥 Огонь',
+                water: '💧 Вода',
+                wind: '🌪️ Ветер',
+                earth: '🌍 Земля',
+                lightning: '⚡ Молния'
+            };
+            return emojis[element] || element;
+        }
+    </script>
+</body>
+</html>
